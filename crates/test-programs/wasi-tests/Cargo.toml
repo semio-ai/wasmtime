@@ -7,7 +7,7 @@ edition = "2018"
 publish = false
 
 [dependencies]
-libc = "0.2.65"
+libc = { git = "https://github.com/semio-ai/rust-lang-libc.git", branch = "master" }
 wasi = "0.10.2"
 more-asserts = "0.2.1"
 lazy_static = "1.4"

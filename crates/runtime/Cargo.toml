@@ -14,7 +14,7 @@ edition = "2018"
 wasmtime-environ = { path = "../environ", version = "=0.33.1" }
 wasmtime-fiber = { path = "../fiber", version = "=0.33.1", optional = true }
 region = "2.1.0"
-libc = { version = "0.2.112", default-features = false }
+libc = { git = "https://github.com/semio-ai/rust-lang-libc.git", branch = "master", default-features = false }
 log = "0.4.8"
 memoffset = "0.6.0"
 indexmap = "1.0.2"
