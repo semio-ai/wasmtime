@@ -1,0 +1,36 @@
+[package]
+name = "cap-primitives"
+version = "0.24.3"
+description = "Capability-based primitives"
+authors = [
+    "Dan Gohman <dev@sunfishcode.online>",
+    "Jakub Konka <kubkon@jakubkonka.com>",
+]
+license = "Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT"
+keywords = ["api", "network", "file"]
+categories = ["filesystem", "network-programming"]
+repository = "https://github.com/bytecodealliance/cap-std"
+edition = "2018"
+
+[dependencies]
+ambient-authority = "0.0.1"
+arbitrary = { version = "1.0.0", optional = true, features = ["derive"] }
+ipnet = "2.3.0"
+maybe-owned = "0.3.4"
+fs-set-times = "0.15.0"
+io-extras = "0.13.0"
+io-lifetimes = { version = "0.5.1", default-features = false }
+
+[target.'cfg(not(windows))'.dependencies]
+rustix = { version = "0.33.0", features = ["procfs"] }
+
+[target.'cfg(target_os = "macos")'.dependencies]
+errno = { version = "0.2.8", default-features = false }
+
+[target.'cfg(target_os = "ios")'.dependencies]
+errno = { version = "0.2.8", default-features = false }
+
+[target.'cfg(windows)'.dependencies]
+winx = "0.31.0"
+winapi = "0.3.9"
+winapi-util = "0.1.5"
