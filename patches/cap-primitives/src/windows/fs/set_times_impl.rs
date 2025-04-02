@@ -1,11 +1,10 @@
 use crate::fs::{open, OpenOptions, SystemTimeSpec};
-use fs_set_times::SetTimes;
+use std::fs::FileTimes;
+use std::time::SystemTime;
 use std::os::windows::fs::OpenOptionsExt;
 use std::path::Path;
 use std::{fs, io};
-use windows_sys::Win32::Storage::FileSystem::{
-    FILE_FLAG_BACKUP_SEMANTICS, FILE_FLAG_OPEN_REPARSE_POINT,
-};
+use winapi::um::winbase::{FILE_FLAG_BACKUP_SEMANTICS, FILE_FLAG_OPEN_REPARSE_POINT};
 
 #[inline]
 pub(crate) fn set_times_impl(
@@ -36,6 +35,16 @@ fn set_times_inner(
 ) -> io::Result<()> {
     let custom_flags = custom_flags | FILE_FLAG_BACKUP_SEMANTICS;
 
+    let atime_std = atime.map(|ts| match ts.into_std() {
+        fs_set_times::SystemTimeSpec::SymbolicNow => SystemTime::now(),
+        fs_set_times::SystemTimeSpec::Absolute(t) => t,
+    });
+    
+    let mtime_std = mtime.map(|ts| match ts.into_std() {
+        fs_set_times::SystemTimeSpec::SymbolicNow => SystemTime::now(),
+        fs_set_times::SystemTimeSpec::Absolute(t) => t,
+    });
+
     // On Windows, `set_times` requires write permissions.
     open(
         start,
@@ -43,7 +52,8 @@ fn set_times_inner(
         OpenOptions::new().write(true).custom_flags(custom_flags),
     )?
     .set_times(
-        atime.map(SystemTimeSpec::into_std),
-        mtime.map(SystemTimeSpec::into_std),
+        FileTimes::new()
+        .set_accessed(atime_std.unwrap())
+        .set_modified(mtime_std.unwrap())
     )
 }
