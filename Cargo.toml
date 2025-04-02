@@ -42,6 +42,7 @@ listenfd = "0.3.5"
 [target.'cfg(unix)'.dependencies]
 rustix = "0.33.7"
 
+
 [dev-dependencies]
 # depend again on wasmtime to activate its default features for tests
 wasmtime = { path = "crates/wasmtime", version = "0.38.0" }
