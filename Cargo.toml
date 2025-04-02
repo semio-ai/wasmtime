@@ -42,6 +42,8 @@ listenfd = "0.3.5"
 [target.'cfg(unix)'.dependencies]
 rustix = "0.33.7"
 
+[patch.crates-io]
+cap-primitives = { path = "./patches/cap-primitives" }
 
 [dev-dependencies]
 # depend again on wasmtime to activate its default features for tests
@@ -84,11 +86,11 @@ members = [
   "examples/fib-debug/wasm",
   "examples/wasi/wasm",
   "examples/tokio/wasm",
-  "fuzz",
 ]
 exclude = [
   'crates/wasi-common/WASI/tools/witx-cli',
-  'docs/rust_wasi_markdown_parser'
+  'docs/rust_wasi_markdown_parser',
+  "fuzz",
 ]
 
 [features]
